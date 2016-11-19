@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Statistic
  *
- * @ORM\Table(name="statistic")
+ * @ORM\Table(name="statistic", indexes={@ORM\Index(name="subway_price_idx", columns={"subway", "price"})} )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\Statistic\StatisticRepository")
  */
 class Statistic
@@ -22,23 +22,20 @@ class Statistic
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="drug", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Drug\Drug")
+     * @ORM\JoinColumn(name="drug", referencedColumnName="id")
      */
     private $drug;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="pharmacy", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Pharmacy\Pharmacy")
+     * @ORM\JoinColumn(name="pharmacy", referencedColumnName="id")
      */
     private $pharmacy;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="subway", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Location\Subway")
+     * @ORM\JoinColumn(name="subway", referencedColumnName="id")
      */
     private $subway;
 

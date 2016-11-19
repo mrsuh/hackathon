@@ -4,7 +4,39 @@ parameters:
         connect_timeout: "%guzzle.connect_timeout%"
 
 services:
+  #clients
    client.http:
         class: AppBundle\Client\Http
         arguments:
             - "%guzzle%"
+
+  #explorers
+   explorer.active_substance:
+        class: AppBundle\Explorer\ActiveSubstanceExplorer
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+   explorer.drug:
+        class: AppBundle\Explorer\DrugExplorer
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+   explorer.pharmacy:
+        class: AppBundle\Explorer\PharmacyExplorer
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+   explorer.subway:
+        class: AppBundle\Explorer\SubwayExplorer
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+   #parsers
+   parser.acme:
+       class: AppBundle\Parser\AcmeParser
+       arguments:
+           - "@doctrine.orm.default_entity_manager"
+           - "@explorer.drug"
+           - "@explorer.pharmacy"
+           - "@explorer.active_substance"
+           - "@monolog.logger"

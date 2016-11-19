@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Source
 {
+    const ACME = 1;
+
     /**
      * @var int
      *

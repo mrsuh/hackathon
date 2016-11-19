@@ -31,14 +31,13 @@ class Subway
     /**
      * @var string
      *
-     * @ORM\Column(name="subwayRegexp", type="string", length=255)
+     * @ORM\Column(name="subway_regexp", type="string", length=255)
      */
-    private $subwayRegexp;
+    private $regexp;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Location\City")
+     * @ORM\JoinColumn(name="city", referencedColumnName="id")
      */
     private $city;
 
@@ -78,30 +77,6 @@ class Subway
     }
 
     /**
-     * Set subwayRegexp
-     *
-     * @param string $subwayRegexp
-     *
-     * @return Subway
-     */
-    public function setSubwayRegexp($subwayRegexp)
-    {
-        $this->subwayRegexp = $subwayRegexp;
-
-        return $this;
-    }
-
-    /**
-     * Get subwayRegexp
-     *
-     * @return string
-     */
-    public function getSubwayRegexp()
-    {
-        return $this->subwayRegexp;
-    }
-
-    /**
      * Set city
      *
      * @param string $city
@@ -123,6 +98,25 @@ class Subway
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexp()
+    {
+        return $this->regexp;
+    }
+
+    /**
+     * @param $regexp
+     * @return $this
+     */
+    public function setRegexp($regexp)
+    {
+        $this->regexp = $regexp;
+
+        return $this;
     }
 }
 

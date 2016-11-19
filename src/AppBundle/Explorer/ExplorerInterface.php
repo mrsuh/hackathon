@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Parser\Source;
+namespace AppBundle\Explorer;
 
 use Doctrine\ORM\EntityManager;
 

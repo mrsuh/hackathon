@@ -2,7 +2,8 @@
 
 namespace AppBundle\Command\Init;
 
-use AppBundle\ODM\Document\Subway;
+use AppBundle\Entity\Location\City;
+use AppBundle\Entity\Location\Subway;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,17 +20,15 @@ class SubwayCommand extends ContainerAwareCommand
     {
         $list = Yaml::parse(file_get_contents($this->getContainer()->getParameter('kernel.root_dir') . '/fixtures/subway.yml'));
 
-        $dm_factory = $this->getContainer()->get('odm.data.mapper.factory');
-        $dm_subway = $dm_factory->init(Subway::class);
-        $dm_subway->drop();
+        $repo_subway = $this->getContainer()->get('doctrine.orm.default_entity_manager')->getRepository(Subway::class);
+        $repo_city = $this->getContainer()->get('doctrine.orm.default_entity_manager')->getRepository(City::class);
         foreach ($list as $key => $val) {
-            $dm_subway->insert(
+            $city = $repo_city->findOneBy(['id' => $val['city']]);
+            $repo_subway->create(
                 (new Subway())
-                    ->setId($val['id'])
+                    ->setCity($city)
                     ->setName($val['name'])
                     ->setRegexp($val['regexp'])
-                    ->setColor($val['color'])
-                    ->setCity($val['city'])
             );
         }
     }

@@ -57,9 +57,8 @@ class Pharmacy
     private $phone;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="subway", type="integer")
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Location\Subway")
+     * @ORM\JoinColumn(name="subway", referencedColumnName="id")
      */
     private $subway;
 
@@ -70,10 +69,7 @@ class Pharmacy
      */
     private $description;
 
-
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -81,12 +77,18 @@ class Pharmacy
         return $this->id;
     }
 
+
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Pharmacy
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -96,21 +98,16 @@ class Pharmacy
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getAddress()
     {
-        return $this->name;
+        return $this->address;
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     *
-     * @return Pharmacy
+     * @param $address
+     * @return $this
      */
     public function setAddress($address)
     {
@@ -120,21 +117,16 @@ class Pharmacy
     }
 
     /**
-     * Get address
-     *
-     * @return string
+     * @return float
      */
-    public function getAddress()
+    public function getGeoLat()
     {
-        return $this->address;
+        return $this->geoLat;
     }
 
     /**
-     * Set geoLat
-     *
-     * @param float $geoLat
-     *
-     * @return Pharmacy
+     * @param $geoLat
+     * @return $this
      */
     public function setGeoLat($geoLat)
     {
@@ -144,21 +136,16 @@ class Pharmacy
     }
 
     /**
-     * Get geoLat
-     *
      * @return float
      */
-    public function getGeoLat()
+    public function getGeoLng()
     {
-        return $this->geoLat;
+        return $this->geoLng;
     }
 
     /**
-     * Set geoLng
-     *
-     * @param float $geoLng
-     *
-     * @return Pharmacy
+     * @param $geoLng
+     * @return $this
      */
     public function setGeoLng($geoLng)
     {
@@ -168,21 +155,16 @@ class Pharmacy
     }
 
     /**
-     * Get geoLng
-     *
-     * @return float
+     * @return string
      */
-    public function getGeoLng()
+    public function getPhone()
     {
-        return $this->geoLng;
+        return $this->phone;
     }
 
     /**
-     * Set phone
-     *
-     * @param string $phone
-     *
-     * @return Pharmacy
+     * @param $phone
+     * @return $this
      */
     public function setPhone($phone)
     {
@@ -192,21 +174,16 @@ class Pharmacy
     }
 
     /**
-     * Get phone
-     *
-     * @return string
+     * @return int
      */
-    public function getPhone()
+    public function getSubway()
     {
-        return $this->phone;
+        return $this->subway;
     }
 
     /**
-     * Set subway
-     *
-     * @param integer $subway
-     *
-     * @return Pharmacy
+     * @param $subway
+     * @return $this
      */
     public function setSubway($subway)
     {
@@ -216,37 +193,22 @@ class Pharmacy
     }
 
     /**
-     * Get subway
-     *
-     * @return int
+     * @return string
      */
-    public function getSubway()
+    public function getDescription()
     {
-        return $this->subway;
+        return $this->description;
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Pharmacy
+     * @param $description
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 }
 

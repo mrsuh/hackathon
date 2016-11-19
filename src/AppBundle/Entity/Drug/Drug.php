@@ -29,16 +29,12 @@ class Drug
     private $name;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="фсеactiveSubstance", type="integer")
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Drug\ActiveSubstance")
+     * @ORM\JoinColumn(name="active_substance", referencedColumnName="id")
      */
-    private $фсеactiveSubstance;
-
+    private $activeSubstance;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -47,11 +43,24 @@ class Drug
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Drug
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -61,37 +70,22 @@ class Drug
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @return mixed
      */
-    public function getName()
+    public function getActiveSubstance()
     {
-        return $this->name;
+        return $this->activeSubstance;
     }
 
     /**
-     * Set фсеactiveSubstance
-     *
-     * @param integer $фсеactiveSubstance
-     *
-     * @return Drug
+     * @param $activeSubstance
+     * @return $this
      */
-    public function setфсеactiveSubstance($фсеactiveSubstance)
+    public function setActiveSubstance($activeSubstance)
     {
-        $this->фсеactiveSubstance = $фсеactiveSubstance;
+        $this->activeSubstance = $activeSubstance;
 
         return $this;
-    }
-
-    /**
-     * Get фсеactiveSubstance
-     *
-     * @return int
-     */
-    public function getфсеactiveSubstance()
-    {
-        return $this->фсеactiveSubstance;
     }
 }
 

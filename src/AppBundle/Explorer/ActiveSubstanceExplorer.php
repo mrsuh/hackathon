@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Parser\Source;
+namespace AppBundle\Explorer;
 
-use AppBundle\Entity\Drug\Drug;
+use AppBundle\Entity\Drug\ActiveSubstance;
 use Doctrine\ORM\EntityManager;
 
-class DrugExplorer implements ExplorerInterface
+class ActiveSubstanceExplorer implements ExplorerInterface
 {
     private $repo;
     private $list;
@@ -16,7 +16,7 @@ class DrugExplorer implements ExplorerInterface
      */
     public function __construct(EntityManager $em)
     {
-        $this->repo = $em->getRepository(Drug::class);
+        $this->repo = $em->getRepository(ActiveSubstance::class);
         $this->initList();
     }
 
@@ -27,7 +27,7 @@ class DrugExplorer implements ExplorerInterface
 
     /**
      * @param $str
-     * @return Drug|null
+     * @return ActiveSubstance|null
      */
     public function explore($str)
     {

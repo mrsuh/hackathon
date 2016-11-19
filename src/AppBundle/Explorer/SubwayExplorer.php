@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Parser\Source;
+namespace AppBundle\Explorer;
 
 use AppBundle\Entity\Location\Subway;
 use Doctrine\ORM\EntityManager;
