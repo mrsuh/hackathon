@@ -33,7 +33,7 @@ class SubwayExplorer implements ExplorerInterface
     {
         $str = mb_strtolower($str_raw);
         foreach($this->list as $item) {
-            if(preg_match($item->getRegexp(), $str)) {
+            if(1 === preg_match($item->getRegexp(), $str)) {
                 return $item;
             }
         }

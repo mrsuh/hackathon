@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Statistic
  *
- * @ORM\Table(name="statistic", indexes={@ORM\Index(name="subway_price_idx", columns={"subway", "price"})} )
+ * @ORM\Table(name="statistic", indexes={@ORM\Index(name="subway_price_idx", columns={"subway", "price"}), @ORM\Index(name="pharmacy_drug_idx", columns={"pharmacy", "drug"})} )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\Statistic\StatisticRepository")
  */
 class Statistic
@@ -42,7 +42,7 @@ class Statistic
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="date")
      */
     private $date;
 

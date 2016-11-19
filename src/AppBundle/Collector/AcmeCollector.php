@@ -3,60 +3,88 @@
 namespace AppBundle\Collector;
 
 use AppBundle\Client\Http;
-use AppBundle\Parser\Source\AcmeParser;
+use AppBundle\Entity\Source\Source;
+use AppBundle\Entity\Statistic\Statistic;
+use AppBundle\Parser\AcmeParser;
 use Doctrine\ORM\EntityManager;
 use GuzzleHttp\Psr7\Request;
 
-class AcmeCollect
+class AcmeCollector
 {
     private $em;
+    private $repo_statistic;
     private $http_client;
     private $parser;
 
     public function __construct(EntityManager $em, Http $http_client, AcmeParser $parser)
     {
         $this->em = $em;
+        $this->repo_statistic = $em->getRepository(Statistic::class);
         $this->http_client = $http_client;
         $this->parser = $parser;
     }
 
-    public function collect()
+    public function collectByAlphabet(Source $source)
     {
-        $response = $this->getContainer()->get('client.http')->send(new Request('GET', 'http://www.acmespb.ru/alphabet.php?f=%D0%90'));
+        $response = $this->http_client->send(new Request('GET', $source->getUrl()));
         $html = $response->getBody()->getContents();
 
         $dom = \Sunra\PhpSimple\HtmlDomParser::str_get_html($html);
 
-        foreach($dom->find('#container a') as $a) {
-            $href = $a->attr['href'];
+        foreach($dom->find('.alphabet a') as $a) {
 
-            $response_drug = $this->getContainer()->get('client.http')->send(new Request('GET', 'http://www.acmespb.ru/' . $href));
+            $symbol = $a->innertext . PHP_EOL;
+            $this->collect($source, $a->attr['href'], $symbol);
+        }
 
+        return true;
+    }
 
-            $html_drug = $response_drug->getBody()->getContents();
+    public function collect($source, $href, $symbol)
+    {
+        $response = $this->http_client->send(new Request('GET', $source->getUrl() . '/' . $href));
+        $html = $response->getBody()->getContents();
 
-            $dom_drug = \Sunra\PhpSimple\HtmlDomParser::str_get_html($html_drug);
+        $dom = \Sunra\PhpSimple\HtmlDomParser::str_get_html($html);
 
+        $count = count($dom->find('#container a'));
+        $index = 0;
+        foreach ($dom->find('#container a') as $a) {
+            echo trim($symbol) . ' | ' . $count . '/' . $index++ . PHP_EOL;
 
-            echo $dom_drug->find('.nameblock .drug', 0)->innertext . PHP_EOL;
-            echo $dom_drug->find('.filters p', 0)->innertext . PHP_EOL;
+            $this->em->beginTransaction();
 
-            foreach($dom_drug->find('#container .trow') as $key => $row) {
+            try {
 
-                if($key === 0) {
-                    continue;
+                $response_drug = $this->http_client->send(new Request('GET', $source->getUrl() . '/' . $a->attr['href']));
+
+                $dom_drug = \Sunra\PhpSimple\HtmlDomParser::str_get_html($response_drug->getBody()->getContents());
+
+                foreach ($this->parser->parse($dom_drug) as $statistic) {
+
+                    $exist_statistic = $this->repo_statistic->findOneBy([
+                        'pharmacy' => $statistic->getPharmacy()->getId(),
+                        'drug'     => $statistic->getDrug()->getId(),
+                    ]);
+
+                    if ($exist_statistic) {
+                        $this->repo_statistic->update(
+                            $exist_statistic
+                                ->setPrice($statistic->getPrice())
+                                ->setDate($statistic->getDate())
+                        );
+                    } else {
+                        $this->repo_statistic->create($statistic);
+                    }
                 }
 
-                echo 'name: ' . $row->find('.name p', 0)->innertext . PHP_EOL;
-                echo 'pharm: ' . $row->find('.pharm a', 0)->innertext . PHP_EOL;
-                echo 'address: ' . $row->find('.address a', 0)->innertext . PHP_EOL;
-                echo 'date: ' . $row->find('.date', 0)->innertext . PHP_EOL;
-                echo 'price: ' . $row->find('.pricefull', 0)->innertext . PHP_EOL;
-
-                echo '---------------------------' . PHP_EOL;
+                $this->em->commit();
+            } catch (\Exception $e) {
+                $this->em->rollback();
             }
-            break;
         }
+
+        return true;
     }
 }
 

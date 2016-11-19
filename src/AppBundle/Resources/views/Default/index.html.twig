@@ -1,12 +1,203 @@
 <!DOCTYPE html>
 <html>
 <head lang="ru">
+    <base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="{{ asset('icon.png') }}">
+
+    <link rel="stylesheet" href="{{ asset('style/style.css') }}">
+
+    <title>Realty</title>
+
+    <script src="{{ asset('js/url.js') }}"></script>
+    <script src="{{ asset('js/class.js') }}"></script>
 </head>
 
 <body>
-hello
+
+{{ dump(list|length)  }}
+
+<div class="block-header"></div>
+
+<div class="block-search-filters">
+
+    <input type="text" placeholder="введите наименование или активное вещество" class="filter-name" value="">
+
+    <button type="button" class="btn filter-subway">Метро</button>
+
+     <span class="filter-price">
+            <input type="text" placeholder="от" class="from" value="">
+            <input type="text" placeholder="до" class="to" value="">
+            <span class="currency">&#8381;</span>
+     </span>
+
+    <button type="button" class="btn search-btn">Найти</button>
+
+</div>
+
+<div class="block-search-filters-switch">
+
+    <div class="block-filter-subway">
+        {% include 'AppBundle:Layout:subway.html.twig' %}
+    </div>
+
+    <div class="block-search-controls">
+
+        <div class="order">
+            <label for="order-date">Сортировка:</label>
+
+            <input id="order-date" type="radio" name="order" {{ _order == 1 ? 'checked="checked"' : '' }} value="1">
+            <label for="order-date">по возрастанию цены</label>
+
+            <input id="order-price" type="radio" name="order" {{ _order == 2 ? 'checked="checked"' : '' }} value="2">
+            <label for="order-price">по убыванию цены</label>
+        </div>
+    </div>
+</div>
+
+<div class="block-search-results">
+
+    <div class="search-results-head">
+        <h1>Цены в Аптеках Санкт-Петербурга</h1>
+    </div>
+
+    <div class="result-count">
+        Результатов: {{ _count_items }}
+    </div>
+
+    <div class="search-results-items">
+        <table>
+            {% for l in list %}
+
+                {% include 'AppBundle:Default:result-item.html.twig' with { item: l } %}
+
+            {% endfor %}
+
+        </table>
+    </div>
+</div>
+
+<div class="block-pagination">
+
+    {% if _pages|length > 1 %}
+
+        {% set last_page = _pages|last %}
+        {% set next_page = _page + 1 %}
+        {% set first_page = _pages|first %}
+
+        {% if _page != 1 and first_page != 1 %}
+            <input id="page-first" type="radio" name="page" value="1">
+            <label for="page-first">В начало</label>
+        {% endif %}
+
+        {% for page in _pages %}
+            <input id="page-{{ page }}" type="radio" name="page" {{ page == _page ? 'checked="checked"' : '' }}
+                   value="{{ page }}">
+            <label for="page-{{ page }}">{{ page }}</label>
+        {% endfor %}
+
+        {% if _count_pages > 1 and _count_pages > _page %}
+            <input id="page-next" type="radio" name="page" value="{{ next_page }}">
+            <label for="page-next">Следующая</label>
+        {% endif %}
+
+    {% endif %}
+
+
+</div>
+
+<div class="block-footer">
+
+</div>
+
 </body>
 
 <script>
     "use strict";
+
+    var search = function () {
+        var name = document.querySelector('.filter-name').value;
+
+        var elem_subway = document.querySelectorAll('.block-filter-subway .subway__station.is-selected');
+        var subway = [];
+        for (var i = 0, length = elem_subway.length; i < length; i++) {
+            subway.push(elem_subway[i].getAttribute('data-id'));
+        }
+
+        var price_from = document.querySelector('.filter-price .from').value;
+        var price_to = document.querySelector('.filter-price .to').value;
+
+        var elem_order = document.querySelectorAll('input[name="order"]');
+        var order = null;
+        for (var i = 0, length = elem_order.length; i < length; i++) {
+            if (elem_order[i].checked) {
+                order = elem_order[i].value;
+                break;
+            }
+        }
+
+        var elem_page = document.querySelectorAll('input[name="page"]');
+        var page = null;
+        for (var i = 0, length = elem_page.length; i < length; i++) {
+            if (elem_page[i].checked) {
+                page = elem_page[i].value;
+                break;
+            }
+        }
+
+        location.href = '{{ url('view.app') }}' +
+                (name ? '&name=' + name : '') +
+                (subway ? '&subway=' + subway : '') +
+                (price_from ? '&price_from=' + price_from : '') +
+                (price_to ? '&price_to=' + price_to : '') +
+                '&order=' + order +
+                (page ? '&page=' + page : '');
+    };
+
+    document.querySelector('.search-btn').addEventListener('click', search);
+
+    var elem_page = document.querySelectorAll('input[name="page"]');
+    for (var i = 0, length = elem_page.length; i < length; i++) {
+        elem_page[i].addEventListener('click', search);
+    }
+
+    var elem_order = document.querySelectorAll('input[name="order"]');
+    for (var i = 0, length = elem_order.length; i < length; i++) {
+        elem_order[i].addEventListener('click', search);
+    }
+
+    var subway = function (e) {
+        var station = e.target;
+
+        if (station.tagName !== 'G') {
+            station = station.parentNode;
+        }
+
+        var transfer_id = station.getAttribute('data-transfer-id');
+
+        var elements;
+
+        if (transfer_id) {
+            elements = document.querySelectorAll('.subway [data-transfer-id="' + transfer_id + '"]');
+        } else {
+            elements = [station];
+        }
+
+        if (station.getAttribute('class').indexOf("is-selected") > -1) {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                elements[i].setAttribute('class', 'subway__station');
+            }
+        } else {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                elements[i].setAttribute('class', 'subway__station is-selected');
+            }
+        }
+    };
+
+    var elem_subway_stations = document.querySelectorAll('.subway__station');
+    for (var i = 0, length = elem_subway_stations.length; i < length; i++) {
+        elem_subway_stations[i].addEventListener('click', subway);
+    }
+
 </script>

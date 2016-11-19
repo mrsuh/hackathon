@@ -40,3 +40,11 @@ services:
            - "@explorer.pharmacy"
            - "@explorer.active_substance"
            - "@monolog.logger"
+
+   #collectors
+   factory.collector:
+       class: AppBundle\Collector\CollectorFactory
+       arguments:
+           - "@doctrine.orm.default_entity_manager"
+           - "@client.http"
+           - "@parser.acme"

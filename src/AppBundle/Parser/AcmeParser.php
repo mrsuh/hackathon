@@ -98,11 +98,22 @@ class AcmeParser
                     throw new ParseException('Pharmacy not found by address ' . $address);
                 }
 
+                $drug = $this->explorer_drug->explore($str_name);
+
+                if (null === $drug) {
+                    $drug = $this->repo_drug->create(
+                        (new Drug())
+                            ->setName($str_name)
+                            ->setActiveSubstance($active_substance)
+                    );
+                }
+
                 $statistics[] = (new Statistic())
                     ->setDrug($drug)
+                    ->setSubway($pharmacy->getSubway())
                     ->setPharmacy($pharmacy)
                     ->setPrice($price)
-                    ->setDate(\DateTime::createFromFormat('d.m.YY', $date));
+                    ->setDate(\DateTime::createFromFormat('j.n.y', $date));
 
             } catch (ParseException $e) {
                 $this->logger->error($e->getMessage());

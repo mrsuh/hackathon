@@ -27,10 +27,6 @@ class PharmacyCommand extends ContainerAwareCommand
 
             $subway = $explorer_subway->explore($val['subway']);
 
-            if(null === $subway) {
-                continue;
-            }
-
             $repo->create(
                 (new Pharmacy())
                     ->setSubway($subway)

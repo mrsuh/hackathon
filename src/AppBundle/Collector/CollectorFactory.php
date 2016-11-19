@@ -5,10 +5,10 @@ namespace AppBundle\Collector;
 use AppBundle\Client\Http;
 use AppBundle\Entity\Source\Source;
 use AppBundle\Exception\FactoryException;
-use AppBundle\Parser\Source\AcmeParser;
+use AppBundle\Parser\AcmeParser;
 use Doctrine\ORM\EntityManager;
 
-class CollectFactory
+class CollectorFactory
 {
     private $em;
     private $http_client;
@@ -21,15 +21,15 @@ class CollectFactory
         $this->parser_acme = $parser_acme;
     }
 
-    public function init(Source $source)
+    public function collect(Source $source)
     {
         switch($source->getId()) {
             case Source::ACME:
-                return new AcmeCollect(
+                return (new AcmeCollector(
                     $this->em,
                     $this->http_client,
                     $this->parser_acme
-                );
+                ))->collectByAlphabet($source);
             default:
                 throw new FactoryException('Class "Collect" can not be initialize by source id ' . $source->getId());
         }

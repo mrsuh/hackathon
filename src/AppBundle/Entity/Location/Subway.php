@@ -41,10 +41,7 @@ class Subway
      */
     private $city;
 
-
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -53,22 +50,17 @@ class Subway
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Subway
+     * @param $id
+     * @return $this
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -77,27 +69,14 @@ class Subway
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return Subway
+     * @param $name
+     * @return $this
      */
-    public function setCity($city)
+    public function setName($name)
     {
-        $this->city = $city;
+        $this->name = $name;
 
         return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
     }
 
     /**
@@ -115,6 +94,25 @@ class Subway
     public function setRegexp($regexp)
     {
         $this->regexp = $regexp;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param $city
+     * @return $this
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
 
         return $this;
     }

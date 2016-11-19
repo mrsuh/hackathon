@@ -26,18 +26,12 @@ class ActiveSubstanceExplorer implements ExplorerInterface
     }
 
     /**
-     * @param $str
+     * @param $str_name
      * @return ActiveSubstance|null
      */
-    public function explore($str)
+    public function explore($str_name)
     {
-        foreach($this->list as $item) {
-            if(mb_stripos($item->getName(), $str)) {
-                return $item;
-            }
-        }
-
-        return null;
+        return $this->repo->findOneBy(['name' => $str_name]);
     }
 }
 

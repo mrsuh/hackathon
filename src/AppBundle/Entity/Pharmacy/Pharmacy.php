@@ -52,7 +52,7 @@ class Pharmacy
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
@@ -65,7 +65,7 @@ class Pharmacy
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=2047)
+     * @ORM\Column(name="description", type="string", length=2047, nullable=true)
      */
     private $description;
 

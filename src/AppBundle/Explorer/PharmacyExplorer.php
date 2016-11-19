@@ -26,18 +26,12 @@ class PharmacyExplorer implements ExplorerInterface
     }
 
     /**
-     * @param $str
+     * @param $str_address
      * @return Pharmacy|null
      */
-    public function explore($str)
+    public function explore($str_address)
     {
-        foreach($this->list as $item) {
-            if(mb_stripos($item->getName(), $str)) {
-                return $item;
-            }
-        }
-
-        return null;
+        return $this->repo->findOneBy(['address' => $str_address]);
     }
 }
 

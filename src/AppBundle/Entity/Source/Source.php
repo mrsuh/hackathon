@@ -37,10 +37,13 @@ class Source
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Location\City")
+     * @ORM\JoinColumn(name="city", referencedColumnName="id")
+     */
+    private $city;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -49,11 +52,27 @@ class Source
     }
 
     /**
-     * Set url
-     *
-     * @param string $url
-     *
-     * @return Source
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param $url
+     * @return $this
      */
     public function setUrl($url)
     {
@@ -63,21 +82,16 @@ class Source
     }
 
     /**
-     * Get url
-     *
      * @return string
      */
-    public function getUrl()
+    public function getName()
     {
-        return $this->url;
+        return $this->name;
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Source
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -87,13 +101,22 @@ class Source
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @return mixed
      */
-    public function getName()
+    public function getCity()
     {
-        return $this->name;
+        return $this->city;
+    }
+
+    /**
+     * @param $city
+     * @return $this
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
     }
 }
 
