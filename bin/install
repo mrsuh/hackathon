@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd "$( cd `dirname $0` && pwd )/.."
+
+php bin/console doctrine:database:create --env=prod
+php bin/console doctrine:schema:create --env=prod
