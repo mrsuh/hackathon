@@ -1,0 +1,4 @@
+api.deploy:
+    path: '%router.api.prefix%/deploy/{deploy_key}'
+    defaults: { _controller: AppBundle:Api\Deploy:deploy, deploy_key: deploy_key }
+    methods: [POST]

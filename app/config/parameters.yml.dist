@@ -16,3 +16,11 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     assets.version: v1
+
+    guzzle.timeout: 10
+    guzzle.connect_timeout: 5
+
+    deploy.key: sdf32edf
+    deploy.script: 'cd /realty; sh bin/deploy'
+
+    router.api.prefix: '/api/v1'

@@ -1,0 +1,10 @@
+parameters:
+    guzzle:
+        timeout: "%guzzle.timeout%"
+        connect_timeout: "%guzzle.connect_timeout%"
+
+services:
+   client.http:
+        class: AppBundle\Client\Http
+        arguments:
+            - "%guzzle%"
