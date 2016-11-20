@@ -8,7 +8,7 @@ Languages:
 * HTML
 
 Framework
-* Symfony2
+* Symfony3
 
 installing
 ```
