@@ -328,7 +328,7 @@
     var initSubwayLabel = function () {
         var label = localStorage.getItem('subway_label');
 
-        if (label.length) {
+        if (label.length && 'null' !== label) {
             document.querySelector('.filter-subway').innerText = label;
         }
     };
