@@ -89,6 +89,7 @@
                 <td>Активное вещество</td>
                 <td>Метро</td>
                 <td>Адрес</td>
+                <td>Дата обновления</td>
                 <td>Цена</td>
             </tr>
             </thead>
@@ -328,7 +329,7 @@
     var initSubwayLabel = function () {
         var label = localStorage.getItem('subway_label');
 
-        if (label.length && 'null' !== label) {
+        if (label.length && 'null' !== label && {{ _subway|length }}) {
             document.querySelector('.filter-subway').innerText = label;
         }
     };

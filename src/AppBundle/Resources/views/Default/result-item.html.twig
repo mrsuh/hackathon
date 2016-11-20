@@ -3,5 +3,6 @@
     <td class="active-substance">{{ item.drug_active_substance }}</td>
     <td class="subway">{{ item.subway_name }}</td>
     <td class="address">{{ item.pharmacy_address }}</td>
+    <td class="date">{{ item.date|date('Y-m-d') }}</td>
     <td class="price">{{ item.price }} <span class="currency">&#8381;</span></td>
 </tr>
