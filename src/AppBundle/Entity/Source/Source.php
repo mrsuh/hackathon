@@ -26,7 +26,7 @@ class Source
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=1023, unique=true)
+     * @ORM\Column(name="url", type="string", length=255, unique=true)
      */
     private $url;
 

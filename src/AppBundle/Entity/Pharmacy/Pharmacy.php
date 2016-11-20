@@ -65,7 +65,7 @@ class Pharmacy
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=2047, nullable=true)
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
 

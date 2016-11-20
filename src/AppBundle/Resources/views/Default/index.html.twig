@@ -27,20 +27,20 @@
 
     <div class="filter-name">
         <span class="name">Поиск</span>
-        <input type="text" placeholder="наименование или активное вещество" value="{{ _name }}">
+        <input type="text" placeholder="наименование или активное вещество" value="{{ _name }}" tabindex="1">
     </div>
 
     <button type="button" class="btn filter-subway">Метро</button>
 
      <span class="filter-price">
-            <input type="text" placeholder="от" class="from" value="{{ _price_from }}">
-            <input type="text" placeholder="до" class="to" value="{{ _price_to }}">
+            <input type="text" placeholder="от" class="from" value="{{ _price_from }}"  tabindex="2">
+            <input type="text" placeholder="до" class="to" value="{{ _price_to }}"  tabindex="3">
             <span class="currency">&#8381;</span>
      </span>
 
     <button type="button" class="btn filter-map active">Показать на карте</button>
 
-    <button type="button" class="btn search-btn">Найти</button>
+    <button type="button" class="btn search-btn" tabindex="4">Найти</button>
 
 </div>
 
@@ -150,7 +150,8 @@
         }
     }
 
-    var search = function () {
+    var search = function (_page) {
+
         var name = document.querySelector('.filter-name input').value;
 
         var elem_subway = document.querySelectorAll('.block-filter-subway .subway__station.is-selected');
@@ -171,13 +172,17 @@
             }
         }
 
-        var elem_page = document.querySelectorAll('input[name="page"]');
-        var page = null;
-        for (var i = 0, length = elem_page.length; i < length; i++) {
-            if (elem_page[i].checked) {
-                page = elem_page[i].value;
-                break;
+        if('undefined' !== typeof _page) {
+            var elem_page = document.querySelectorAll('input[name="page"]');
+            var page = null;
+            for (var i = 0, length = elem_page.length; i < length; i++) {
+                if (elem_page[i].checked) {
+                    page = elem_page[i].value;
+                    break;
+                }
             }
+        } else {
+            page = _page;
         }
 
         location.href = '{{ url('view.app') }}?' +
@@ -189,7 +194,18 @@
                 (page ? 'page=' + page : '');
     };
 
-    document.querySelector('.search-btn').addEventListener('click', search);
+    document.querySelector('.search-btn').addEventListener('click', function(){
+        search(1);
+    });
+
+    var findOnEnter = function(e){
+        if (e.keyCode == 13) {
+            search(1);
+            return false;
+        }
+    };
+
+    document.querySelector('.filter-name input').addEventListener('keydown', findOnEnter);
 
     var elem_page = document.querySelectorAll('input[name="page"]');
     for (var i = 0, length = elem_page.length; i < length; i++) {
@@ -218,6 +234,8 @@
             elements = [station];
         }
 
+       var station_names= [];
+
         if (station.getAttribute('class').indexOf("is-selected") > -1) {
             for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].setAttribute('class', 'subway__station');
@@ -227,7 +245,21 @@
                 elements[i].setAttribute('class', 'subway__station is-selected');
             }
         }
+
+        var stations = document.querySelectorAll('.subway__station');
+        for(var i=0, length = stations.length; i < length; i ++) {
+            if(stations[i].getAttribute('class').indexOf("is-selected") > -1) {
+                station_names.push(stations[i].querySelector('text').innerHTML);
+            }
+        }
+
+        if(station_names.length) {
+            document.querySelector('.filter-subway').innerText = 'м. ' + station_names[0] + ',...';
+        } else {
+            document.querySelector('.filter-subway').innerText = 'Метро';
+        }
     };
+
 
     var elem_subway_stations = document.querySelectorAll('.subway__station');
     for (var i = 0, length = elem_subway_stations.length; i < length; i++) {
