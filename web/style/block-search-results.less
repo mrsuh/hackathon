@@ -18,11 +18,48 @@
     font-size: 14px;
     height: 20px;
     width: 100%;
+    margin-bottom: 20px;
   }
 
   .search-results-items {
-    width: 820px;
-    font-size: 14px;
+    font-size: 0;
+    .search-result-item {
+      border: 0;
+      border-spacing: 0;
+      padding: 0;
+      min-width: 830px;
 
+      &:last-of-type {
+        td{
+          border-bottom: none;
+        }
+      }
+
+      td {
+        font-size: 14px;
+        line-height: 38px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom: 1px solid @main-border-color;
+      }
+      .name {
+        min-width: 220px;
+      }
+      .subway {
+        min-width: 60px;
+      }
+      .address{
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .price {
+        min-width: 65px;
+        font-size: 19px;
+        font-weight: 700;
+        .currency {
+          font-weight: 600;
+        }
+      }
+    }
   }
 }

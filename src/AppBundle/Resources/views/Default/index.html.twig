@@ -8,29 +8,38 @@
 
     <link rel="stylesheet" href="{{ asset('style/style.css') }}">
 
-    <title>Realty</title>
 
-    <script src="{{ asset('js/url.js') }}"></script>
-    <script src="{{ asset('js/class.js') }}"></script>
+    <title>Аптеки Санкт Петербурга</title>
+
+    <script src="{{ asset('js/url.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/class.js') }}" type="text/javascript"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjhg9DF4XQXS8SL3e2_rTB4ggje9tMOOw&callback=initMap"
+            type="text/javascript"></script>
+
 </head>
 
 <body>
 
-{{ dump(list|length)  }}
-
-<div class="block-header"></div>
+<div class="block-header">
+    <h1>Поиск лекарств hakaton2016</h1>
+</div>
 
 <div class="block-search-filters">
 
-    <input type="text" placeholder="введите наименование или активное вещество" class="filter-name" value="">
+    <div class="filter-name">
+        <span class="name">Поиск</span>
+        <input type="text" placeholder="наименование или активное вещество" value="{{ _name }}">
+    </div>
 
     <button type="button" class="btn filter-subway">Метро</button>
 
      <span class="filter-price">
-            <input type="text" placeholder="от" class="from" value="">
-            <input type="text" placeholder="до" class="to" value="">
+            <input type="text" placeholder="от" class="from" value="{{ _price_from }}">
+            <input type="text" placeholder="до" class="to" value="{{ _price_to }}">
             <span class="currency">&#8381;</span>
      </span>
+
+    <button type="button" class="btn filter-map">Показать на карте</button>
 
     <button type="button" class="btn search-btn">Найти</button>
 
@@ -59,15 +68,17 @@
 <div class="block-search-results">
 
     <div class="search-results-head">
-        <h1>Цены в Аптеках Санкт-Петербурга</h1>
+        <h1>Цены в аптеках Санкт-Петербурга</h1>
     </div>
+
+    <div id="block-map"></div>
 
     <div class="result-count">
         Результатов: {{ _count_items }}
     </div>
 
     <div class="search-results-items">
-        <table>
+        <table border="0" cellspacing="0" cellpadding="0">
             {% for l in list %}
 
                 {% include 'AppBundle:Default:result-item.html.twig' with { item: l } %}
@@ -104,7 +115,6 @@
 
     {% endif %}
 
-
 </div>
 
 <div class="block-footer">
@@ -116,8 +126,23 @@
 <script>
     "use strict";
 
+    var map;
+    var initMap = function() {
+        map = new google.maps.Map(document.getElementById('block-map'), {
+            center: {lat: 59.92, lng: 30.35},
+            zoom: 12,
+            scrollwheel: false
+        });
+
+        new google.maps.Marker({
+            position: {lat: 59.92, lng: 30.35},
+            map: map,
+            title:"Hello World!"
+        });
+    };
+
     var search = function () {
-        var name = document.querySelector('.filter-name').value;
+        var name = document.querySelector('.filter-name input').value;
 
         var elem_subway = document.querySelectorAll('.block-filter-subway .subway__station.is-selected');
         var subway = [];
@@ -146,13 +171,13 @@
             }
         }
 
-        location.href = '{{ url('view.app') }}' +
-                (name ? '&name=' + name : '') +
-                (subway ? '&subway=' + subway : '') +
-                (price_from ? '&price_from=' + price_from : '') +
-                (price_to ? '&price_to=' + price_to : '') +
-                '&order=' + order +
-                (page ? '&page=' + page : '');
+        location.href = '{{ url('view.app') }}?' +
+                (name ? 'name=' + name + '&' : '') +
+                (subway.length ? 'subway=' + subway + '&' : '') +
+                (price_from ? 'price_from=' + price_from + '&' : '') +
+                (price_to ? 'price_to=' + price_to + '&' : '') +
+                'order=' + order + '&' +
+                (page ? 'page=' + page : '');
     };
 
     document.querySelector('.search-btn').addEventListener('click', search);
@@ -199,5 +224,37 @@
     for (var i = 0, length = elem_subway_stations.length; i < length; i++) {
         elem_subway_stations[i].addEventListener('click', subway);
     }
+
+    var switchSubway = function () {
+
+        var block = document.querySelector('.block-filter-subway');
+        var btn = document.querySelector('.filter-subway');
+
+        if (block.hasClass('show')) {
+            block.removeClass('show');
+            btn.removeClass('active');
+        } else {
+            block.addClass('show');
+            btn.addClass('active');
+        }
+    };
+
+    var switchMap = function () {
+
+        var block = document.getElementById('block-map');
+        var btn = document.querySelector('.filter-map');
+
+        if (block.hasClass('show')) {
+            block.removeClass('show');
+            btn.removeClass('active');
+        } else {
+            block.addClass('show');
+            btn.addClass('active');
+        }
+    };
+
+    document.querySelector('.filter-subway').addEventListener('click', switchSubway);
+    document.querySelector('.filter-map').addEventListener('click', switchMap);
+
 
 </script>

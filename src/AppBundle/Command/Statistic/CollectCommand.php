@@ -21,6 +21,5 @@ class CollectCommand extends ContainerAwareCommand
         foreach($sources as $source) {
             $this->getContainer()->get('factory.collector')->collect($source);
         }
-
     }
 }

@@ -14,6 +14,12 @@ class CollectorFactory
     private $http_client;
     private $parser_acme;
 
+    /**
+     * CollectorFactory constructor.
+     * @param EntityManager $em
+     * @param Http $http_client
+     * @param AcmeParser $parser_acme
+     */
     public function __construct(EntityManager $em, Http $http_client, AcmeParser $parser_acme)
     {
         $this->em = $em;
@@ -21,6 +27,11 @@ class CollectorFactory
         $this->parser_acme = $parser_acme;
     }
 
+    /**
+     * @param Source $source
+     * @return bool
+     * @throws FactoryException
+     */
     public function collect(Source $source)
     {
         switch($source->getId()) {

@@ -22,6 +22,14 @@ class AcmeParser
     private $repo_active_substance;
     private $logger;
 
+    /**
+     * AcmeParser constructor.
+     * @param EntityManager $em
+     * @param DrugExplorer $explorer_drug
+     * @param PharmacyExplorer $explorer_pharmacy
+     * @param ActiveSubstanceExplorer $explorer_active_substance
+     * @param Logger $logger
+     */
     public function __construct(
         EntityManager $em,
         DrugExplorer $explorer_drug,
@@ -38,6 +46,11 @@ class AcmeParser
         $this->logger = $logger;
     }
 
+    /**
+     * @param \simplehtmldom_1_5\simple_html_dom $dom
+     * @return array
+     * @throws ParseException
+     */
     public function parse(\simplehtmldom_1_5\simple_html_dom $dom)
     {
         $str_name = $dom->find('.nameblock .drug', 0)->innertext . PHP_EOL;
@@ -59,9 +72,12 @@ class AcmeParser
             );
         }
 
+        echo 'PARSE ' . $str_name . PHP_EOL;
+
         $drug = $this->explorer_drug->explore($str_name);
 
         if (null === $drug) {
+            echo 'CREATE' . PHP_EOL;
             $drug = $this->repo_drug->create(
                 (new Drug())
                     ->setName($str_name)
@@ -98,16 +114,6 @@ class AcmeParser
                     throw new ParseException('Pharmacy not found by address ' . $address);
                 }
 
-                $drug = $this->explorer_drug->explore($str_name);
-
-                if (null === $drug) {
-                    $drug = $this->repo_drug->create(
-                        (new Drug())
-                            ->setName($str_name)
-                            ->setActiveSubstance($active_substance)
-                    );
-                }
-
                 $statistics[] = (new Statistic())
                     ->setDrug($drug)
                     ->setSubway($pharmacy->getSubway())
@@ -117,6 +123,7 @@ class AcmeParser
 
             } catch (ParseException $e) {
                 $this->logger->error($e->getMessage());
+                echo $e->getMessage() . PHP_EOL;
             }
         }
 

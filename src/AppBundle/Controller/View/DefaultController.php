@@ -12,21 +12,56 @@ class DefaultController extends Controller
     public function mainAction(Request $request)
     {
         $page = $request->get('page') ?: 1;
+        $order = $request->get('order') ?(int)$request->get('order'): 1;
+        $name = $request->get('name');
+        $price_from = $request->get('price_from');
+        $price_to = $request->get('price_to');
 
-        $total = count($this->get('doctrine.orm.default_entity_manager')->getRepository(Statistic::class)->findByParams());
-        $list = $this->get('doctrine.orm.default_entity_manager')->getRepository(Statistic::class)->findByParamsAndLimit();
+        $subway = [];
+        foreach (explode(',', $request->get('subway')) as &$v) {
+            if (empty($v)) {
+                unset($v);
+                continue;
+            }
+            $subway[] = (int)$v;
+        }
+        unset($v);
+
+        $items_on_page = $this->getParameter('items_on_page');
+
+        $repo = $this->get('doctrine.orm.default_entity_manager')->getRepository(Statistic::class);
+
+        $total = count($repo->findByParams(
+            $name,
+            $price_from,
+            $price_to,
+            $subway,
+            $order
+        ));
+        $list = $repo->findByParamsAndLimit(
+            $name,
+            $price_from,
+            $price_to,
+            $subway,
+            $order,
+            $items_on_page,
+            $page
+        );
+
+        $count_pages = ceil($total / $items_on_page);
 
         return $this->render('AppBundle:Default:index.html.twig', [
             'list' => $list,
             'subways' => [],
-            '_page' => 1,
-            '_pages' => Paginator::numbers(1,$total, 5),
-            '_count_pages' => ceil($total / 20),
+            '_page' => $page,
+            '_name' => $name,
+            '_pages' => Paginator::numbers($page, $count_pages, 5),
+            '_count_pages' => $count_pages,
             '_count_items' => $total,
-            '_subway' => 1,
-            '_price_from' => 1,
-            '_price_to' => 1,
-            '_order' => 1
+            '_subway' => $subway,
+            '_price_from' => $price_from,
+            '_price_to' => $price_to,
+            '_order' => $order
 
         ]);
     }

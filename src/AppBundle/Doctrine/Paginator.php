@@ -2,11 +2,14 @@
 
 namespace AppBundle\Doctrine;
 
-use Doctrine\ORM\Query;
-
 class Paginator
 {
-
+    /**
+     * @param $page
+     * @param $total
+     * @param int $range
+     * @return array
+     */
     public static function numbers($page, $total, $range = 5)
     {
         if ($range % 2 === 0) {
