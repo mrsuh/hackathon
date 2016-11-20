@@ -17,7 +17,6 @@ class Subway
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -31,21 +30,17 @@ class Subway
     /**
      * @var string
      *
-     * @ORM\Column(name="subwayRegexp", type="string", length=255)
+     * @ORM\Column(name="subway_regexp", type="string", length=255)
      */
-    private $subwayRegexp;
+    private $regexp;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Location\City")
+     * @ORM\JoinColumn(name="city", referencedColumnName="id")
      */
     private $city;
 
-
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -54,11 +49,27 @@ class Subway
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Subway
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -68,61 +79,41 @@ class Subway
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getRegexp()
     {
-        return $this->name;
+        return $this->regexp;
     }
 
     /**
-     * Set subwayRegexp
-     *
-     * @param string $subwayRegexp
-     *
-     * @return Subway
+     * @param $regexp
+     * @return $this
      */
-    public function setSubwayRegexp($subwayRegexp)
+    public function setRegexp($regexp)
     {
-        $this->subwayRegexp = $subwayRegexp;
+        $this->regexp = $regexp;
 
         return $this;
     }
 
     /**
-     * Get subwayRegexp
-     *
-     * @return string
+     * @return mixed
      */
-    public function getSubwayRegexp()
+    public function getCity()
     {
-        return $this->subwayRegexp;
+        return $this->city;
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return Subway
+     * @param $city
+     * @return $this
      */
     public function setCity($city)
     {
         $this->city = $city;
 
         return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
     }
 }
 

@@ -24,3 +24,5 @@ parameters:
     deploy.script: 'cd /realty; sh bin/deploy'
 
     router.api.prefix: '/api/v1'
+
+    items_on_page: 20

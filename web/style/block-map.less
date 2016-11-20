@@ -1,0 +1,29 @@
+.block-map {
+    width: 100%;
+    background-color: #f3f3f3;
+    height: 0;
+
+    -webkit-transition: height 0.4s ease-out 0s, opacity 0.4s ease-out 0s;
+    -moz-transition: height 0.4s ease-out 0s, opacity 0.4s ease-out 0s;
+    -o-transition: height 0.4s ease-out 0s, opacity 0.4s ease-out 0s;
+    transition: height 0.4s ease-out 0s, opacity 0.4s ease-out 0s;
+
+    &.show {
+        height: 300px;
+        margin-bottom: 20px;
+
+        #map {
+            display: block;
+        }
+    }
+
+    #map {
+        display: none;
+    }
+}
+
+#map {
+    height: 300px;
+    width: 100%;
+}
+

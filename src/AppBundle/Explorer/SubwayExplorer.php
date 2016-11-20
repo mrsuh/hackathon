@@ -1,22 +1,22 @@
 <?php
 
-namespace AppBundle\Parser\Source;
+namespace AppBundle\Explorer;
 
-use AppBundle\Entity\Drug\Drug;
+use AppBundle\Entity\Location\Subway;
 use Doctrine\ORM\EntityManager;
 
-class DrugExplorer implements ExplorerInterface
+class SubwayExplorer implements ExplorerInterface
 {
     private $repo;
     private $list;
 
     /**
-     * DrugExplorer constructor.
+     * SubwayExplorer constructor.
      * @param EntityManager $em
      */
     public function __construct(EntityManager $em)
     {
-        $this->repo = $em->getRepository(Drug::class);
+        $this->repo = $em->getRepository(Subway::class);
         $this->initList();
     }
 
@@ -26,13 +26,14 @@ class DrugExplorer implements ExplorerInterface
     }
 
     /**
-     * @param $str
-     * @return Drug|null
+     * @param $str_raw
+     * @return Subway|null
      */
-    public function explore($str)
+    public function explore($str_raw)
     {
+        $str = mb_strtolower($str_raw);
         foreach($this->list as $item) {
-            if(mb_stripos($item->getName(), $str)) {
+            if(1 === preg_match($item->getRegexp(), $str)) {
                 return $item;
             }
         }
