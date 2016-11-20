@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository\Statistic;
 
+use AppBundle\Entity\Statistic\Statistic;
 use AppBundle\Repository\GeneralRepository;
 
 class StatisticRepository extends GeneralRepository
@@ -49,7 +50,9 @@ class StatisticRepository extends GeneralRepository
     public function findByParamsAndLimit($name, $price_from, $price_to, $subway, $order, $items_on_page, $page = 1)
     {
         $query_str = '
-         SELECT s.id as id, d.name as drug_name, p.name as pharmacy_name, p.address as pharmacy_address, p.geoLng as geo_lat, p.geoLat as geo_lng, sub.name as subway_name, s.price as price FROM AppBundle\Entity\Statistic\Statistic s
+         SELECT s.id as id, d.name as drug_name, asub.name as drug_active_substance, p.name as pharmacy_name, p.address as pharmacy_address,
+          p.geoLng as geo_lat, p.geoLat as geo_lng, sub.name as subway_name, s.price as price 
+          FROM AppBundle\Entity\Statistic\Statistic s
               JOIN AppBundle\Entity\Drug\Drug d WITH s.drug = d.id
               LEFT JOIN AppBundle\Entity\Drug\ActiveSubstance asub WITH d.activeSubstance = asub.id
               LEFT JOIN AppBundle\Entity\Location\Subway sub WITH s.subway = sub.id
@@ -78,7 +81,7 @@ class StatisticRepository extends GeneralRepository
             $parameters['ids'] = $ids;
         }
 
-        $query_str .= " ORDER BY s.price " . ($order === 1 ? 'ASC' : 'DESC');
+        $query_str .= " ORDER BY s.price " . ($order === Statistic::ORDER_LOWER_FIRST ? 'ASC' : 'DESC');
 
         return $this->_em
             ->createQuery($query_str)

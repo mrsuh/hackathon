@@ -16,6 +16,12 @@ class AcmeCollector
     private $http_client;
     private $parser;
 
+    /**
+     * AcmeCollector constructor.
+     * @param EntityManager $em
+     * @param Http $http_client
+     * @param AcmeParser $parser
+     */
     public function __construct(EntityManager $em, Http $http_client, AcmeParser $parser)
     {
         $this->em = $em;
@@ -24,6 +30,10 @@ class AcmeCollector
         $this->parser = $parser;
     }
 
+    /**
+     * @param Source $source
+     * @return bool
+     */
     public function collectByAlphabet(Source $source)
     {
         $response = $this->http_client->send(new Request('GET', $source->getUrl()));
@@ -38,7 +48,12 @@ class AcmeCollector
         return true;
     }
 
-    public function collect($source, $href)
+    /**
+     * @param Source $source
+     * @param $href
+     * @return bool
+     */
+    public function collect(Source $source, $href)
     {
         $response = $this->http_client->send(new Request('GET', $source->getUrl() . '/' . $href));
         $html = $response->getBody()->getContents();
@@ -85,6 +100,9 @@ class AcmeCollector
         return true;
     }
 
+    /**
+     * @param \simplehtmldom_1_5\simple_html_dom $dom
+     */
     private function setStatistics(\simplehtmldom_1_5\simple_html_dom $dom)
     {
         foreach ($this->parser->parse($dom) as $statistic) {

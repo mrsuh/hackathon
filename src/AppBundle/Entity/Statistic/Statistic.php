@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Statistic
 {
+    const ORDER_LOWER_FIRST = 1;
+    const ORDER_HIGHER_FIRST = 2;
+
     /**
      * @var int
      *
