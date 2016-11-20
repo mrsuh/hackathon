@@ -72,12 +72,9 @@ class AcmeParser
             );
         }
 
-        echo 'PARSE ' . $str_name . PHP_EOL;
-
         $drug = $this->explorer_drug->explore($str_name);
 
         if (null === $drug) {
-            echo 'CREATE' . PHP_EOL;
             $drug = $this->repo_drug->create(
                 (new Drug())
                     ->setName($str_name)
@@ -123,7 +120,6 @@ class AcmeParser
 
             } catch (ParseException $e) {
                 $this->logger->error($e->getMessage());
-                echo $e->getMessage() . PHP_EOL;
             }
         }
 

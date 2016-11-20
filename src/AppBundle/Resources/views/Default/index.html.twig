@@ -13,8 +13,7 @@
 
     <script src="{{ asset('js/url.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/class.js') }}" type="text/javascript"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjhg9DF4XQXS8SL3e2_rTB4ggje9tMOOw&callback=initMap"
-            type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
 </head>
 
@@ -39,7 +38,7 @@
             <span class="currency">&#8381;</span>
      </span>
 
-    <button type="button" class="btn filter-map">Показать на карте</button>
+    <button type="button" class="btn filter-map active">Показать на карте</button>
 
     <button type="button" class="btn search-btn">Найти</button>
 
@@ -71,11 +70,11 @@
         <h1>Цены в аптеках Санкт-Петербурга</h1>
     </div>
 
-    <div id="block-map"></div>
-
     <div class="result-count">
         Результатов: {{ _count_items }}
     </div>
+
+    <div id="block-map" class="show"></div>
 
     <div class="search-results-items">
         <table border="0" cellspacing="0" cellpadding="0">
@@ -126,20 +125,30 @@
 <script>
     "use strict";
 
-    var map;
-    var initMap = function() {
-        map = new google.maps.Map(document.getElementById('block-map'), {
-            center: {lat: 59.92, lng: 30.35},
-            zoom: 12,
-            scrollwheel: false
-        });
+    var coords = [
+        {% for l in list %}
+        {lat: {{ l.geo_lat|number_format(2, '.', '') }}, lng: {{ l.geo_lng|number_format(2, '.', '')}}, name: '{{ l.pharmacy_name }}' },
+        {% endfor %}
+    ];
 
-        new google.maps.Marker({
-            position: {lat: 59.92, lng: 30.35},
-            map: map,
-            title:"Hello World!"
+    ymaps.ready(init);
+    var myMap;
+
+    function init(){
+        myMap = new ymaps.Map("block-map", {
+            center: [coords[0].lng, coords[0].lat],
+            zoom: 11,
+            controls: ['zoomControl', 'typeSelector',  'fullscreenControl']
         });
-    };
+        myMap.behaviors.disable('scrollZoom');
+
+      for(var i = 0, length = coords.length; i < length; i ++ ){
+            var coord = coords[i];
+          var name = 'Аптека' + coord.name;
+
+            myMap.geoObjects.add(new ymaps.Placemark([coord.lng, coord.lat], { hintContent: name, balloonContent: name }));
+        }
+    }
 
     var search = function () {
         var name = document.querySelector('.filter-name input').value;

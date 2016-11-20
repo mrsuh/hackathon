@@ -49,7 +49,7 @@ class StatisticRepository extends GeneralRepository
     public function findByParamsAndLimit($name, $price_from, $price_to, $subway, $order, $items_on_page, $page = 1)
     {
         $query_str = '
-         SELECT s.id as id, d.name as drug_name, p.address as pharmacy_address, sub.name as subway_name, s.price as price FROM AppBundle\Entity\Statistic\Statistic s
+         SELECT s.id as id, d.name as drug_name, p.name as pharmacy_name, p.address as pharmacy_address, p.geoLng as geo_lat, p.geoLat as geo_lng, sub.name as subway_name, s.price as price FROM AppBundle\Entity\Statistic\Statistic s
               JOIN AppBundle\Entity\Drug\Drug d WITH s.drug = d.id
               LEFT JOIN AppBundle\Entity\Drug\ActiveSubstance asub WITH d.activeSubstance = asub.id
               LEFT JOIN AppBundle\Entity\Location\Subway sub WITH s.subway = sub.id
