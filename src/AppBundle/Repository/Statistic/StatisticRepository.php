@@ -51,7 +51,7 @@ class StatisticRepository extends GeneralRepository
     {
         $query_str = '
          SELECT s.id as id, d.name as drug_name, asub.name as drug_active_substance, p.name as pharmacy_name, p.address as pharmacy_address,
-          p.geoLng as geo_lat, p.geoLat as geo_lng, sub.name as subway_name, s.price as price 
+          p.geoLng as geo_lat, p.geoLat as geo_lng, sub.name as subway_name, s.price as price, s.date
           FROM AppBundle\Entity\Statistic\Statistic s
               JOIN AppBundle\Entity\Drug\Drug d WITH s.drug = d.id
               LEFT JOIN AppBundle\Entity\Drug\ActiveSubstance asub WITH d.activeSubstance = asub.id
