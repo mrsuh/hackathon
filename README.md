@@ -10,7 +10,7 @@ Languages:
 Framework
 * Symfony3
 
-![Screen](/screen)
+![Screen](/screen.png)
 
 ## Install
 ```
