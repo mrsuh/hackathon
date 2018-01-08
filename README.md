@@ -1,6 +1,8 @@
 Project for Hakaton 2016
 ==
 
+![Screen](/screen.png)
+
 Languages:
 * PHP
 * JS
@@ -9,8 +11,6 @@ Languages:
 
 Framework
 * Symfony3
-
-![Screen](/screen.png)
 
 ## Install
 ```
