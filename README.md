@@ -10,12 +10,20 @@ Languages:
 Framework
 * Symfony3
 
-installing
+![Screen](/screen)
+
+## Install
 ```
+sh bin/deploy
 sh bin/install
 ```
 
-deploying
+## Deploy
 ```
 sh bin/deploy
+```
+
+## Collect
+```bash
+php bin/console app:collect
 ```
