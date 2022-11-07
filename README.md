@@ -1,8 +1,13 @@
-Project for Hakaton 2016
-==
+# Project for hackathon 2016
 
 ![Screen](/screen.png)
 
+## Installation
+```bash
+cd docker && docker-compose up
+```
+
+## Tools
 Languages:
 * PHP
 * JS
@@ -11,19 +16,3 @@ Languages:
 
 Framework
 * Symfony3
-
-## Install
-```
-sh bin/deploy
-sh bin/install
-```
-
-## Deploy
-```
-sh bin/deploy
-```
-
-## Collect
-```bash
-php bin/console app:collect
-```
